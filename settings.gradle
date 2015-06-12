@@ -1,0 +1,20 @@
+rootProject.name = 'DataMiningCloud'
+
+//Core
+include ':dataminingcloud.cep'
+
+//Loader
+include ':dataminingcloud.dmservice.client'
+include ':dataminingcloud.dmservice.server'
+include ':dataminingcloud.dmservice.rest'
+
+//Engine
+include ':dataminingcloud.engine.client'
+include ':dataminingcloud.engine.server'
+
+//Deployment
+include ':DMCloud'
+
+//GAE
+include ':DMCloudGAE'
+

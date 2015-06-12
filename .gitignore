@@ -1,0 +1,16 @@
+.classpath
+.flexLibProperties
+.flexProperties
+.project
+.springBeans
+.DS_Store
+.externalToolBuilders/
+.gradle/
+.metadata/
+.settings/
+bin/
+bin-debug/
+build/
+target/
+/js/lib
+/js/lib/*

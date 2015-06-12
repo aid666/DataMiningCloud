@@ -1,0 +1,1004 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: DMC
+  description: An API specification of DMC based on swagger-2.0 specification
+  termsOfService: 'http://dm-cloud.appspot.com/terms/'
+  contact:
+    name: DataMiningCloud API team
+    email: aid666@gmail.com
+    url: 'http://dm-cloud.appspot.com/'
+  license:
+    name: MIT
+    url: 'http://opensource.org/licenses/MIT'
+host: dm-cloud.appspot.com
+basePath: /rest
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /svcs:
+    get:
+      description: Search DMService Metadata based on the filter. Default limit is 50 and the default start index is 0
+      operationId: searchDMSvc
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: tags
+          in: query
+          description: tags to filter by
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+        - name: name
+          in: query
+          description: "DMService's type to filter by"
+          required: false
+          type: string
+        - name: type
+          in: query
+          description: "DMService's type to filter by"
+          required: false
+          type: string
+        - name: domain
+          in: query
+          description: "DMService's domain to filter by"
+          required: false
+          type: string
+        - name: locale
+          in: query
+          description: "DMService's locale to filter by"
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: maximum number of results to return
+          required: false
+          type: integer
+          format: int32
+        - name: start
+          in: query
+          description: start index of response entities list
+          required: false
+          type: integer
+          format: int32
+        - name: orderby
+          in: query
+          description: the order factor of the list.
+          required: false
+          type: string
+      responses:
+        '200':
+          description: DMService Metadata List
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DMSvcMetadata'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    post:
+      description: "Create a new DM Service"
+      operationId: addSvc
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: body
+          name: body
+          description: ""
+          schema:
+            $ref: "#/definitions/DMSvcMetadata"
+      responses:
+        200:
+          description: OK
+          description: Created DM Service
+          schema:
+              $ref: '#/definitions/DMSvcMetadata'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  
+  /svcs/{svcKey}:
+    get:
+      tags:
+      - svcs
+      summary: Get metadata of DM Service
+      description: Return the medata of DM Service based on the svcKey
+      parameters:
+      - in: path
+        name: svcKey
+        description: "The generated key of a DMService"
+        type: string
+      
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/DMSvcMetadata'
+    put:
+      tags:
+      - svcs
+      summary: Get metadata of DM Service
+      description: Return the medata of DM Service based on the svcKey
+      parameters:
+      - in: path
+        name: svcKey
+        description: "The generated key of a DMService"
+        type: string
+      - in: body
+        name: body
+        description: "The new DMService"
+        schema:
+          $ref: "#/definitions/DMSvcMetadata"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/DMSvcMetadata'
+              
+  /svcs/{svcKey}/processes:
+    get:
+      tags:
+      - svcs
+      summary: Get process history of the DM Service
+      parameters:
+      - in: path
+        name: svcKey
+        description: "The generated key of a DMService"
+        type: string
+      - name: limit
+        in: query
+        description: maximum number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: start
+        in: query
+        description: start index of response entities list
+        required: false
+        type: integer
+        format: int32
+      - name: orderby
+        in: query
+        description: the order factor of the list.
+        required: false
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DMSvcProcess'
+    post:
+      tags:
+      - svcs
+      summary: Get metadata of DM Service
+      description: Return the medata of DM Service based on the svcKey
+      parameters:
+      - in: path
+        name: svcKey
+        description: "The generated key of a DMService"
+        type: string
+      - in: body
+        name: body
+        description: "The new DMService"
+        schema:
+          $ref: "#/definitions/DMData"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/DMSvcProcess'
+              
+  /svcs/{svcKey}/processers:
+    get:
+      tags:
+      - svcs
+      parameters:
+      - in: path
+        name: svcKey
+        type: string
+      - name: limit
+        in: query
+        description: maximum number of results to return
+        required: false
+        type: integer
+        format: int32
+      - name: start
+        in: query
+        description: start index of response entities list
+        required: false
+        type: integer
+        format: int32
+      - name: orderby
+        in: query
+        description: the order factor of the list.
+        required: false
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DMProcesser'
+    post:
+      tags:
+      - svcs
+      summary: Get metadata of DM Service
+      description: Return the medata of DM Service based on the svcKey
+      parameters:
+      - in: path
+        name: svcKey
+        description: "The generated key of a DMService"
+        type: string
+      - in: body
+        name: body
+        description: "The new DMService"
+        schema:
+          $ref: "#/definitions/DMData"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DMProcesser'
+                          
+  /svcs/{svcKey}/input:
+    get:
+      tags:
+      - svcs
+      parameters:
+      - in: path
+        name: svcKey
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DMInput'
+    put:
+      tags:
+      - svcs
+      - input
+      parameters:
+      - in: path
+        name: svcKey
+        type: string
+      - in: body
+        name: body
+        schema:
+          $ref: "#/definitions/DMInput"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/DMInput'
+                          
+  /svcs/{svcKey}/output:
+    get:
+      tags:
+      - svcs
+      parameters:
+      - in: path
+        name: svcKey
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DMSvcOutput'
+    put:
+      tags:
+      - svcs
+      - input
+      parameters:
+      - in: path
+        name: svcKey
+        type: string
+      - in: body
+        name: body
+        schema:
+          $ref: "#/definitions/DMSvcOutput"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/DMSvcOutput'
+              
+  /svcs/{svcKey}/archives:
+    get:
+      tags:
+      - archives
+      parameters:
+      - in: path
+        name: svcKey
+        type: string
+      
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ServiceArchiveMetadata'
+    put:
+      tags:
+      - svcs
+      parameters:
+      - in: path
+        name: svcKey
+        type: string
+      - in: body
+        name: body
+        description: "The new DMService"
+        schema:
+          $ref: "#/definitions/ServiceArchiveMetadata"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ServiceArchiveMetadata' 
+    
+  /models:
+    get:
+      description: Search Model Metadata based on the filter. Default limit is 50 and the default start index is 0
+      operationId: searchModel
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: tags
+          in: query
+          description: tags to filter by
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+        - name: name
+          in: query
+          description: "Model's name to filter by"
+          required: false
+          type: string
+        - name: type
+          in: query
+          description: "Model's type to filter by"
+          required: false
+          type: string
+        - name: domain
+          in: query
+          description: "Model's domain to filter by"
+          required: false
+          type: string
+        - name: locale
+          in: query
+          description: "Model's locale to filter by"
+          required: false
+          type: string
+        - name: trainerType
+          in: query
+          description: "Model's trainer type to filter by"
+          required: false
+          type: string
+        - name: referenceCountLowLimit
+          in: query
+          description: The minium reference count to filter by
+          type: integer
+          format: int32
+        - name: limit
+          in: query
+          description: maximum number of results to return
+          required: false
+          type: integer
+          format: int32
+        - name: start
+          in: query
+          description: start index of response entities list
+          required: false
+          type: integer
+          format: int32
+        - name: orderby
+          in: query
+          description: the order factor of the list.
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Model List
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ModelMetadata'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    
+    post:
+      description: "Create a new DM Processer Model"
+      operationId: addSvc
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: body
+          name: body
+          description: ""
+          schema:
+            $ref: "#/definitions/ModelMetadata"
+      responses:
+        200:
+          description: OK
+          description: Created DM Processer Model
+          schema:
+              $ref: '#/definitions/ModelMetadata'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+  /models/{modelKey}:
+    get:
+      summary: Get metadata of DM Service
+      description: Return the medata of model based on the svcKey
+      parameters:
+      - in: path
+        name: modelKey
+        description: "The generated key of a Processer model"
+        type: string
+      
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ModelMetadata'
+              
+  /models/{modelKey}/archives:
+    get:
+      tags:
+      - archives
+      parameters:
+      - in: path
+        name: modelKey
+        type: string
+      
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ModelArchiveMetadata'
+    put:
+      tags:
+      - svcs
+      parameters:
+      - in: path
+        name: modelKey
+        type: string
+      - in: body
+        name: body
+        description: "The new DMService"
+        schema:
+          $ref: "#/definitions/ModelArchiveMetadata"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ModelArchiveMetadata'
+              
+  /models/{modelKey}/data:
+    get:
+      summary: Get data of DM Model
+      parameters:
+      - in: path
+        name: modelKey
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ModelData'
+    put:
+      summary: Get data of DM Model
+      parameters:
+      - in: path
+        name: modelKey
+        type: string
+      - in: body
+        name: body
+        schema:
+          $ref: '#/definitions/ModelData'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ModelData'
+            
+  /models/{modelKey}/trainer:
+    get:
+      summary: Get metadata of DM Service
+      description: Return the medata of model based on the svcKey
+      parameters:
+      - in: path
+        name: modelKey
+        description: "The generated key of a Processer model"
+        type: string
+      
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ModelTrainerLinker'
+    put:
+      description: Update the trainer
+      parameters:
+      - in: path
+        name: modelKey
+        description: "The generated key of a Processer model"
+        type: string
+      - in: body
+        name: body
+        schema:
+          $ref: '#/definitions/ModelTrainerLinker'
+      responses:
+        200:
+          description: OK
+            
+  /models/{modelKey}/trainer/builds:
+    get:
+      description: Return the build history of the trainer's build.
+      parameters:
+      - in: path
+        name: modelKey
+        description: "The generated key of a Processer model"
+        type: string
+      
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ModelTrainerBuild'
+    post:
+      description: Update the trainer
+      parameters:
+      - in: path
+        name: modelKey
+        description: "The generated key of a Processer model"
+        type: string
+      - in: body
+        name: body
+        description: Training set
+        schema:
+          $ref: '#/definitions/DMData'
+      responses:
+        200:
+          description: OK
+            
+  /models/{modelKey}/trainer/builds/{buildKey}:
+    get:
+      description: Return the build of the trainer's build.
+      parameters:
+      - in: path
+        name: modelKey
+        description: "The generated key of a Processer model build"
+        type: string
+      - in: path
+        name: buildKey
+        description: "The generated key of a Processer model build"
+        type: string
+      
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ModelTrainerBuild'
+            
+  /models/{modelKey}/trainer/builds/{buildKey}/updates:
+    get:
+      description: Return the build of the trainer's build.
+      parameters:
+      - in: path
+        name: modelKey
+        description: "The generated key of a Processer model build"
+        type: string
+      - in: path
+        name: buildKey
+        description: "The generated key of a Processer model build"
+        type: string
+      
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ModelTrainerBuild'
+    post:
+      description: update the model as an updatable model
+      parameters:
+      - in: path
+        name: modelKey
+        description: "The generated key of a Processer model build"
+        type: string
+      - in: path
+        name: buildKey
+        type: string
+      - in: body
+        name: body
+        description: Training set
+        schema:
+          $ref: '#/definitions/DMData'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ModelTrainerBuild'
+  
+  
+  /trainers:
+    get:
+      operationId: searchDMSvc
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - name: tags
+          in: query
+          description: tags to filter by
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: csv
+        - name: name
+          in: query
+          description: "DMService's type to filter by"
+          required: false
+          type: string
+        - name: type
+          in: query
+          description: "DMService's type to filter by"
+          required: false
+          type: string
+        - name: domain
+          in: query
+          description: "DMService's domain to filter by"
+          required: false
+          type: string
+        - name: locale
+          in: query
+          description: "DMService's locale to filter by"
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: maximum number of results to return
+          required: false
+          type: integer
+          format: int32
+        - name: start
+          in: query
+          description: start index of response entities list
+          required: false
+          type: integer
+          format: int32
+        - name: orderby
+          in: query
+          description: the order factor of the list.
+          required: false
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+             $ref: '#/definitions/ModelTrainerMetadata'
+
+  /trainers/{trainerKey}:
+    get:
+      tags:
+      - svcs
+      summary: Get metadata of DM Model Trainer
+      description: Return the medata of DM Trainer by the trainer key
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ModelTrainerMetadata'
+    put:
+      tags:
+      - svcs
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      - in: body
+        name: body
+        description: "The new DMService"
+        schema:
+          $ref: "#/definitions/ModelTrainerMetadata"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ModelTrainerMetadata'
+              
+  /trainers/{trainerKey}/archives:
+    get:
+      tags:
+      - archives
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/TrainerArchiveMetadata'
+    put:
+      tags:
+      - svcs
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      - in: body
+        name: body
+        description: "The new DMService"
+        schema:
+          $ref: "#/definitions/TrainerArchiveMetadata"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/TrainerArchiveMetadata'
+              
+  /trainers/{trainerKey}/processers:
+    get:
+      tags:
+      - svcs
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DMProcesser'
+    put:
+      tags:
+      - svcs
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      - in: body
+        name: body
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/DMProcesser'
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DMProcesser'
+                          
+  /trainers/{trainerKey}/input:
+    get:
+      tags:
+      - trainers
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DMInput'
+    put:
+      tags:
+      - svcs
+      - input
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      - in: body
+        name: body
+        schema:
+          $ref: "#/definitions/DMInput"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/DMInput'
+                          
+  /trainers/{trainerKey}/evaluations:
+    get:
+      tags:
+      - svcs
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ModelTrainerEvaluation'
+    post:
+      tags:
+      - svcs
+      - input
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      - in: body
+        name: body
+        schema:
+          $ref: "#/definitions/EvaluationData"
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ModelTrainerEvaluation'
+  
+definitions:
+  DMSvcMetadata:
+    required:
+      - key
+    properties:
+      key:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+      domain:
+        type: string
+      type:
+        type: string
+  
+  DMData:
+    properties:
+      key:
+        type: string
+        
+  DMSvcProcess:
+    properties:
+      key:
+        type: string
+        
+  DMProcesser:
+    properties:
+      key:
+        type: string
+        
+  DMInput:
+    properties:
+      key:
+        type: string
+        
+  DMSvcOutput:
+    properties:
+      key:
+        type: string
+  
+  ServiceArchiveMetadata:
+    properties:
+      key:
+        type: string
+  
+  ModelMetadata:
+    required:
+      - key
+    properties:
+      key:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+      domain:
+        type: string
+      type:
+        type: string
+  
+  ModelData:
+    properties:
+      name:
+        type: string
+        
+  ModelTrainerLinker:
+    properties:
+      key:
+        type: string
+  
+  ModelArchiveMetadata:
+    properties:
+      key:
+        type: string  
+        
+  ModelTrainerMetadata:
+    properties:
+      name:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+      package:
+        description: The catelog path of the trainer, classifier.decisionTree.id3
+        type: string
+        
+  ModelTrainerBuild:
+    properties:
+      buildKey:
+        type: string
+        
+  TrainerArchiveMetadata:
+    properties:
+      key:
+        type: string
+        
+  EvaluationData:
+    properties:
+      type:
+        type: string
+        
+  ModelTrainerEvaluation:
+    properties:
+      buildKey:
+        type: string
+        
+  errorModel:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

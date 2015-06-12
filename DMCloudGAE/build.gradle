@@ -1,0 +1,14 @@
+
+task gae {
+	description = 'build GAE project file'
+
+	doLast {
+		def sourceFolder = file("static/")
+		def targetFolder = file("war/")
+		
+		copy{
+			from sourceFolder
+			into targetFolder
+		}
+	}
+}
