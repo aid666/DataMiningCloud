@@ -168,7 +168,6 @@ paths:
         200:
           description: OK
       
-              
   /svcs/{svcKey}/processes:
     get:
       tags:
@@ -238,9 +237,7 @@ paths:
         "200":
           description: OK
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/ProcessMetadata'
+            $ref: '#/definitions/Process'
     delete:
       tags:
       - svcs
@@ -391,6 +388,39 @@ paths:
           schema:
               $ref: '#/definitions/ServiceArchiveMetadata' 
     
+  /svcs/{svcKey}/archives/{archiveKey}:
+    get:
+      tags:
+      - svcs
+      - archives
+      parameters:
+      - in: path
+        name: svcKey
+        type: string
+      - in: path
+        name: archiveKey
+        type: string
+      
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ServiceArchive'
+    delete:
+      tags:
+      - svcs
+      - archives
+      parameters:
+      - in: path
+        name: svcKey
+        type: string
+      - in: path
+        name: archiveKey
+        type: string
+      responses:
+        200:
+          description: OK
+    
   /models:
     get:
       description: Search Model Metadata based on the filter. Default limit is 50 and the default start index is 0
@@ -465,7 +495,6 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
-    
     post:
       description: "Create a new DM Processer Model"
       operationId: addSvc
@@ -527,7 +556,6 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/ModelMetadata'
-              
     delete:
       parameters:
         - in: path
@@ -568,7 +596,39 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/ModelArchiveMetadata'
-              
+     
+  /models/{modelKey}/archives/{archiveKey}:
+    get:
+      tags:
+      - svcs
+      - archives
+      parameters:
+      - in: path
+        name: modelKey
+        type: string
+      - in: path
+        name: archiveKey
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+              $ref: '#/definitions/ModelArchive'
+    delete:
+      tags:
+      - svcs
+      - archives
+      parameters:
+      - in: path
+        name: modelKey
+        type: string
+      - in: path
+        name: archiveKey
+        type: string
+      responses:
+        200:
+          description: OK
+           
   /models/{modelKey}/data:
     get:
       summary: Get data of DM Model
@@ -677,7 +737,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ModelTrainerBuild'
-    
     delete:
       parameters:
       - in: path
@@ -692,7 +751,6 @@ paths:
       responses:
         200:
           description: OK
-      
             
   /models/{modelKey}/trainer/builds/{buildKey}/updates:
     get:
@@ -732,21 +790,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ModelTrainerBuild'
-    
-    delete:
-      parameters:
-      - in: path
-        name: modelKey
-        description: "The generated key of a Processer model build"
-        type: string
-      - in: path
-        name: buildKey
-        description: "The generated key of a Processer model build"
-        type: string
-      
-      responses:
-        200:
-          description: OK
   
   /trainers:
     get:
@@ -807,7 +850,20 @@ paths:
             type: array
             items:
              $ref: '#/definitions/ModelTrainerMetadata'
-
+    post:
+      tags:
+      - trainer
+      parameters:
+      - in: body
+        name: body
+        schema:
+          $ref: "#/definitions/ModelTrainerMetadata"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ModelTrainerMetadata'
+  
   /trainers/{trainerKey}:
     get:
       tags:
@@ -841,6 +897,16 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/ModelTrainerMetadata'
+    delete:
+      tags:
+      - trainer
+      parameters:
+        - in: path
+          name: trainerKey
+          type: string
+      responses:
+        200:
+          description: OK
               
   /trainers/{trainerKey}/archives:
     get:
@@ -875,6 +941,23 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/TrainerArchiveMetadata'
+  
+  /trainers/{trainerKey}/archives/{archiveKey}:
+    get:
+      tags:
+      - trainer
+      parameters:
+        - in: path
+          name: trainerKey
+          type: string
+        - in: path
+          name: archiveKey
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/TrainerArchive'
               
   /trainers/{trainerKey}/processers:
     get:
@@ -999,7 +1082,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/ModelTrainerEvaluation'
-              
     delete:
       tags:
       - trainer
@@ -1015,10 +1097,137 @@ paths:
         "200":
           description: OK
   
+  /archives/svcs:
+    get:
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/ServiceArchiveMetadata'
+    post:
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/ServiceArchive'
+      responses:
+        200:
+          description: OK
+          schema: 
+            $ref: '#/definitions/ServiceArchiveMetadata'
+            
+  /archives/svcs/{archiveKey}:
+    get:
+      parameters:
+        - in: path
+          name: archiveKey
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ServiceArchive'
+    delete:
+      parameters:
+        - in: path
+          name: archiveKey
+          type: string
+      responses:
+        200:
+          description: OK
+      
+  /archives/model:
+    get:
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/ModelArchiveMetadata'
+    post:
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/ModelArchive'
+      responses:
+        200:
+          description: OK
+          schema: 
+            $ref: '#/definitions/ModelArchiveMetadata'
+            
+  /archives/model/{archiveKey}:
+    get:
+      parameters:
+        - in: path
+          name: archiveKey
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ModelArchive'
+    delete:
+      parameters:
+        - in: path
+          name: archiveKey
+          type: string
+      responses:
+        200:
+          description: OK
+            
+  /archives/trainer:
+    get:
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/TrainerArchiveMetadata'
+    post:
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/TrainerArchive'
+      responses:
+        200:
+          description: OK
+          schema: 
+            $ref: '#/definitions/TrainerArchiveMetadata'
+            
+  /archives/trainer/{archiveKey}:
+    get:
+      parameters:
+        - in: path
+          name: archiveKey
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/TrainerArchive'
+    delete:
+      parameters:
+        - in: path
+          name: archiveKey
+          type: string
+      responses:
+        200:
+          description: OK
+  
   /processAlgorithms:
     get:
       summary: Search processers metdata.
       description: Processers, it is actually execute code of any process flow. But this processer do not keep any model or paramter.
+      parameters:
+        - in: query
+          name: package
+          type: string
       responses:
         200:
           description: OK
@@ -1081,7 +1290,12 @@ definitions:
     properties:
       key:
         type: string
-  
+        
+  ServiceArchive:
+    properties:
+      key:
+        type: string
+        
   ModelMetadata:
     required:
       - key
@@ -1115,6 +1329,11 @@ definitions:
     properties:
       key:
         type: string  
+  
+  ModelArchive:
+    properties:
+      key:
+        type: string  
         
   ModelTrainerMetadata:
     properties:
@@ -1134,6 +1353,11 @@ definitions:
         type: string
         
   TrainerArchiveMetadata:
+    properties:
+      key:
+        type: string
+        
+  TrainerArchive:
     properties:
       key:
         type: string
