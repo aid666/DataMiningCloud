@@ -22,6 +22,8 @@ produces:
 paths:
   /svcs:
     get:
+      tags:
+      - svcs
       description: Search DMService Metadata based on the filter. Default limit is 50 and the default start index is 0
       operationId: searchDMSvc
       produces:
@@ -121,7 +123,6 @@ paths:
         name: svcKey
         description: "The generated key of a DMService"
         type: string
-      
       responses:
         200:
           description: OK
@@ -130,8 +131,14 @@ paths:
     put:
       tags:
       - svcs
-      summary: Get metadata of DM Service
-      description: Return the medata of DM Service based on the svcKey
+      summary: Update metadata of DM Service
+      description: Update the medata of DM Service based on the svcKey
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
       parameters:
       - in: path
         name: svcKey
@@ -147,6 +154,20 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/DMSvcMetadata'
+    delete:
+      tags:
+      - svcs
+      summary: Remove the whole DM Service
+      description: Remove the medata, archive, processers, input and outpu, not including related model.
+      parameters:
+        - in: path
+          name: svcKey
+          type: string
+      
+      responses:
+        200:
+          description: OK
+      
               
   /svcs/{svcKey}/processes:
     get:
@@ -181,27 +202,59 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/DMSvcProcess'
+              $ref: '#/definitions/ProcessMetadata'
     post:
       tags:
       - svcs
-      summary: Get metadata of DM Service
-      description: Return the medata of DM Service based on the svcKey
+      - processes
       parameters:
       - in: path
         name: svcKey
-        description: "The generated key of a DMService"
         type: string
       - in: body
         name: body
-        description: "The new DMService"
         schema:
           $ref: "#/definitions/DMData"
       responses:
         200:
           description: OK
           schema:
-              $ref: '#/definitions/DMSvcProcess'
+            $ref: '#/definitions/Process'
+          
+  /svcs/{svcKey}/processes/{processKey}:
+    get:
+      tags:
+      - svcs
+      summary: Get process history of the DM Service
+      parameters:
+      - in: path
+        name: svcKey
+        description: "The generated key of a DMService"
+        type: string
+      - name: processKey
+        in: path
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ProcessMetadata'
+    delete:
+      tags:
+      - svcs
+      summary: Delete process history of the DM Service
+      parameters:
+      - in: path
+        name: svcKey
+        type: string
+      - name: processKey
+        in: path
+        type: string
+      responses:
+        "200":
+          description: OK
               
   /svcs/{svcKey}/processers:
     get:
@@ -211,35 +264,17 @@ paths:
       - in: path
         name: svcKey
         type: string
-      - name: limit
-        in: query
-        description: maximum number of results to return
-        required: false
-        type: integer
-        format: int32
-      - name: start
-        in: query
-        description: start index of response entities list
-        required: false
-        type: integer
-        format: int32
-      - name: orderby
-        in: query
-        description: the order factor of the list.
-        required: false
-        type: string
       responses:
         "200":
           description: OK
           schema:
             type: array
             items:
-              $ref: '#/definitions/DMProcesser'
-    post:
+              $ref: '#/definitions/Processer'
+    put:
       tags:
       - svcs
-      summary: Get metadata of DM Service
-      description: Return the medata of DM Service based on the svcKey
+      - processer
       parameters:
       - in: path
         name: svcKey
@@ -247,16 +282,17 @@ paths:
         type: string
       - in: body
         name: body
-        description: "The new DMService"
         schema:
-          $ref: "#/definitions/DMData"
+          type: array
+          items:
+            $ref: "#/definitions/Processer"
       responses:
         200:
           description: OK
           schema:
             type: array
             items:
-              $ref: '#/definitions/DMProcesser'
+              $ref: '#/definitions/Processer'
                           
   /svcs/{svcKey}/input:
     get:
@@ -293,6 +329,7 @@ paths:
     get:
       tags:
       - svcs
+      - output
       parameters:
       - in: path
         name: svcKey
@@ -305,7 +342,7 @@ paths:
     put:
       tags:
       - svcs
-      - input
+      - output
       parameters:
       - in: path
         name: svcKey
@@ -323,6 +360,7 @@ paths:
   /svcs/{svcKey}/archives:
     get:
       tags:
+      - svcs
       - archives
       parameters:
       - in: path
@@ -334,9 +372,10 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/ServiceArchiveMetadata'
-    put:
+    post:
       tags:
       - svcs
+      - archives
       parameters:
       - in: path
         name: svcKey
@@ -455,6 +494,8 @@ paths:
             
   /models/{modelKey}:
     get:
+      tags:
+      - model
       summary: Get metadata of DM Service
       description: Return the medata of model based on the svcKey
       parameters:
@@ -467,7 +508,34 @@ paths:
         200:
           description: OK
           schema:
+            $ref: '#/definitions/ModelMetadata'
+    put:
+      tags:
+      - model
+      parameters:
+      - in: path
+        name: modelKey
+        description: "The generated key of a Processer model"
+        type: string
+      - in: body
+        name: body
+        schema:
+          $ref: '#/definitions/ModelMetadata'
+      
+      responses:
+        200:
+          description: OK
+          schema:
               $ref: '#/definitions/ModelMetadata'
+              
+    delete:
+      parameters:
+        - in: path
+          name: modelKey
+          type: string
+      responses:
+        200:
+          description: OK
               
   /models/{modelKey}/archives:
     get:
@@ -483,7 +551,7 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/ModelArchiveMetadata'
-    put:
+    post:
       tags:
       - svcs
       parameters:
@@ -609,6 +677,22 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ModelTrainerBuild'
+    
+    delete:
+      parameters:
+      - in: path
+        name: modelKey
+        description: "The generated key of a Processer model build"
+        type: string
+      - in: path
+        name: buildKey
+        description: "The generated key of a Processer model build"
+        type: string
+      
+      responses:
+        200:
+          description: OK
+      
             
   /models/{modelKey}/trainer/builds/{buildKey}/updates:
     get:
@@ -648,11 +732,25 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ModelTrainerBuild'
-  
+    
+    delete:
+      parameters:
+      - in: path
+        name: modelKey
+        description: "The generated key of a Processer model build"
+        type: string
+      - in: path
+        name: buildKey
+        description: "The generated key of a Processer model build"
+        type: string
+      
+      responses:
+        200:
+          description: OK
   
   /trainers:
     get:
-      operationId: searchDMSvc
+      operationId: searchTrainer
       produces:
         - application/json
         - application/xml
@@ -713,7 +811,7 @@ paths:
   /trainers/{trainerKey}:
     get:
       tags:
-      - svcs
+      - trainer
       summary: Get metadata of DM Model Trainer
       description: Return the medata of DM Trainer by the trainer key
       parameters:
@@ -728,7 +826,7 @@ paths:
               $ref: '#/definitions/ModelTrainerMetadata'
     put:
       tags:
-      - svcs
+      - trainer
       parameters:
       - in: path
         name: trainerKey
@@ -747,6 +845,7 @@ paths:
   /trainers/{trainerKey}/archives:
     get:
       tags:
+      - trainer
       - archives
       parameters:
       - in: path
@@ -758,9 +857,10 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/TrainerArchiveMetadata'
-    put:
+    post:
       tags:
-      - svcs
+      - trainer
+      - archives
       parameters:
       - in: path
         name: trainerKey
@@ -779,7 +879,8 @@ paths:
   /trainers/{trainerKey}/processers:
     get:
       tags:
-      - svcs
+      - trainer
+      - processer
       parameters:
       - in: path
         name: trainerKey
@@ -790,10 +891,11 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/DMProcesser'
+              $ref: '#/definitions/Processer'
     put:
       tags:
-      - svcs
+      - trainer
+      - processer
       parameters:
       - in: path
         name: trainerKey
@@ -803,19 +905,20 @@ paths:
         schema:
           type: array
           items:
-            $ref: '#/definitions/DMProcesser'
+            $ref: '#/definitions/Processer'
       responses:
         200:
           description: OK
           schema:
             type: array
             items:
-              $ref: '#/definitions/DMProcesser'
+              $ref: '#/definitions/Processer'
                           
   /trainers/{trainerKey}/input:
     get:
       tags:
-      - trainers
+      - trainer
+      - input
       parameters:
       - in: path
         name: trainerKey
@@ -827,7 +930,7 @@ paths:
             $ref: '#/definitions/DMInput'
     put:
       tags:
-      - svcs
+      - trainer
       - input
       parameters:
       - in: path
@@ -846,7 +949,8 @@ paths:
   /trainers/{trainerKey}/evaluations:
     get:
       tags:
-      - svcs
+      - trainer
+      - evaluation
       parameters:
       - in: path
         name: trainerKey
@@ -875,7 +979,54 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/ModelTrainerEvaluation'
+                            
+  /trainers/{trainerKey}/evaluations/{evaKey}:
+    get:
+      tags:
+      - trainer
+      - evaluation
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      - in: path
+        name: evaKey
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ModelTrainerEvaluation'
+              
+    delete:
+      tags:
+      - trainer
+      - evaluation
+      parameters:
+      - in: path
+        name: trainerKey
+        type: string
+      - in: path
+        name: evaKey
+        type: string
+      responses:
+        "200":
+          description: OK
   
+  /processAlgorithms:
+    get:
+      summary: Search processers metdata.
+      description: Processers, it is actually execute code of any process flow. But this processer do not keep any model or paramter.
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ProcesserAlgorithm'
+    
 definitions:
   DMSvcMetadata:
     required:
@@ -901,12 +1052,17 @@ definitions:
       key:
         type: string
         
-  DMSvcProcess:
+  Process:
     properties:
       key:
         type: string
         
-  DMProcesser:
+  ProcessMetadata:
+    properties:
+      key:
+        type: string
+        
+  Processer:
     properties:
       key:
         type: string
@@ -990,6 +1146,11 @@ definitions:
   ModelTrainerEvaluation:
     properties:
       buildKey:
+        type: string
+        
+  ProcesserAlgorithm:
+    properties:
+      algKey:
         type: string
         
   errorModel:
