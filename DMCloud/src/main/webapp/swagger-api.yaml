@@ -17,8 +17,10 @@ schemes:
   - https
 consumes:
   - application/json
+  - application/xml
 produces:
   - application/json
+  - application/xml
 paths:
   /svcs:
     get:
@@ -26,55 +28,6 @@ paths:
       - svcs
       description: Search DMService Metadata based on the filter. Default limit is 50 and the default start index is 0
       operationId: searchDMSvc
-      produces:
-        - application/json
-        - application/xml
-      parameters:
-        - name: tags
-          in: query
-          description: tags to filter by
-          required: false
-          type: array
-          items:
-            type: string
-          collectionFormat: csv
-        - name: name
-          in: query
-          description: "DMService's type to filter by"
-          required: false
-          type: string
-        - name: type
-          in: query
-          description: "DMService's type to filter by"
-          required: false
-          type: string
-        - name: domain
-          in: query
-          description: "DMService's domain to filter by"
-          required: false
-          type: string
-        - name: locale
-          in: query
-          description: "DMService's locale to filter by"
-          required: false
-          type: string
-        - name: limit
-          in: query
-          description: maximum number of results to return
-          required: false
-          type: integer
-          format: int32
-        - name: start
-          in: query
-          description: start index of response entities list
-          required: false
-          type: integer
-          format: int32
-        - name: orderby
-          in: query
-          description: the order factor of the list.
-          required: false
-          type: string
       responses:
         '200':
           description: DMService Metadata List
@@ -89,12 +42,6 @@ paths:
     post:
       description: "Create a new DM Service"
       operationId: addSvc
-      consumes:
-        - application/json
-        - application/xml
-      produces:
-        - application/json
-        - application/xml
       parameters:
         - in: body
           name: body
@@ -1259,6 +1206,15 @@ definitions:
   DMData:
     properties:
       key:
+        type: string
+      data:
+        type: array
+        items:
+          type: string
+  
+  Attribute:
+    properties:
+      name:
         type: string
         
   Process:
