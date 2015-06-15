@@ -1184,6 +1184,16 @@ paths:
               $ref: '#/definitions/ProcesserAlgorithm'
     
 definitions:
+  Domain:
+    properties:
+      name:
+        type: string
+      date:
+        description: The domain in differnent date may different, think about the change of computer brand from 1995 to 2015 .
+        type: string
+      parentDomain:
+        $ref: '#/definitions/Domain'
+  
   DMSvcMetadata:
     required:
       - key
@@ -1199,8 +1209,12 @@ definitions:
         items:
           type: string
       domain:
-        type: string
+        $ref: '#/definitions/Domain'
       type:
+        type: string
+      isPublic:
+        type: boolean
+      owner:
         type: string
   
   DMData:
@@ -1210,28 +1224,77 @@ definitions:
       data:
         type: array
         items:
+          $ref: '#/definitions/ColumnData'
+  
+  ColumnData:
+    properties:
+      attribute:
+        $ref: '#/definitions/Attribute'
+      data:
+        type: array
+        items:
           type: string
+  
+  DataInfor:
+    properties:
+      name:
+        type: string
+      domain:
+        $ref: '#/definitions/Domain'
   
   Attribute:
     properties:
       name:
         type: string
+      type:
+        type: string
+      format:
+        type: string
+      dataInfor:
+        $ref: '#/definitions/DataInfor'
         
   Process:
     properties:
       key:
         type: string
+      inputData:
+        $ref: '#/definitions/DMData'
+      outputData:
+        $ref: '#/definitions/DMData'
+      errors:
+        type: array
+        items:
+          type: string
+      warnings:
+        type: array
+        items:
+          type: string
+      logs:
+        type: array
+        items:
+          type: string
         
   ProcessMetadata:
     properties:
       key:
         type: string
+      status:
+        type: string
         
   Processer:
     properties:
-      key:
+      modelRef:
+        $ref: '#/definitions/ModelReference'
+      algrithm:
+        $ref: '#/definitions/ProcesserAlgorithm'
+  
+  ModelReference:
+    properties:
+      modelKey: 
         type: string
-        
+      accessCode:
+        type: string
+      
   DMInput:
     properties:
       key:
@@ -1267,8 +1330,12 @@ definitions:
         items:
           type: string
       domain:
-        type: string
+        $ref: '#/definitions/Domain'
       type:
+        type: string
+      isPublic:
+        type: boolean
+      owner:
         type: string
   
   ModelData:
@@ -1292,8 +1359,14 @@ definitions:
         type: string  
         
   ModelTrainerMetadata:
+    required:
+      - key
     properties:
+      key:
+        type: string
       name:
+        type: string
+      description:
         type: string
       tags:
         type: array
@@ -1301,6 +1374,14 @@ definitions:
           type: string
       package:
         description: The catelog path of the trainer, classifier.decisionTree.id3
+        type: string
+      domain:
+        $ref: '#/definitions/Domain'
+      type:
+        type: string
+      isPublic:
+        type: boolean
+      owner:
         type: string
         
   ModelTrainerBuild:
