@@ -22,6 +22,8 @@ produces:
   - application/json
   - application/xml
 paths:
+  #Designer service
+ 
   /svcs:
     get:
       tags:
@@ -58,7 +60,7 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
-  
+ 
   /svcs/{svcKey}:
     get:
       tags:
@@ -110,11 +112,11 @@ paths:
         - in: path
           name: svcKey
           type: string
-      
+     
       responses:
         200:
           description: OK
-      
+     
   /svcs/{svcKey}/processes:
     get:
       tags:
@@ -166,7 +168,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Process'
-          
+         
   /svcs/{svcKey}/processes/{processKey}:
     get:
       tags:
@@ -199,7 +201,7 @@ paths:
       responses:
         "200":
           description: OK
-              
+             
   /svcs/{svcKey}/processers:
     get:
       tags:
@@ -237,7 +239,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Processer'
-                          
+                         
   /svcs/{svcKey}/input:
     get:
       tags:
@@ -268,7 +270,7 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/DMInput'
-                          
+                         
   /svcs/{svcKey}/output:
     get:
       tags:
@@ -282,7 +284,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/DMSvcOutput'
+            $ref: '#/definitions/DMOutput'
     put:
       tags:
       - svcs
@@ -294,79 +296,13 @@ paths:
       - in: body
         name: body
         schema:
-          $ref: "#/definitions/DMSvcOutput"
+          $ref: "#/definitions/DMOutput"
       responses:
         200:
           description: OK
           schema:
-              $ref: '#/definitions/DMSvcOutput'
-              
-  /svcs/{svcKey}/archives:
-    get:
-      tags:
-      - svcs
-      - archives
-      parameters:
-      - in: path
-        name: svcKey
-        type: string
-      
-      responses:
-        200:
-          description: OK
-          schema:
-              $ref: '#/definitions/ServiceArchiveMetadata'
-    post:
-      tags:
-      - svcs
-      - archives
-      parameters:
-      - in: path
-        name: svcKey
-        type: string
-      - in: body
-        name: body
-        description: "The new DMService"
-        schema:
-          $ref: "#/definitions/ServiceArchiveMetadata"
-      responses:
-        200:
-          description: OK
-          schema:
-              $ref: '#/definitions/ServiceArchiveMetadata' 
-    
-  /svcs/{svcKey}/archives/{archiveKey}:
-    get:
-      tags:
-      - svcs
-      - archives
-      parameters:
-      - in: path
-        name: svcKey
-        type: string
-      - in: path
-        name: archiveKey
-        type: string
-      
-      responses:
-        200:
-          description: OK
-          schema:
-              $ref: '#/definitions/ServiceArchive'
-    delete:
-      tags:
-      - svcs
-      - archives
-      parameters:
-      - in: path
-        name: svcKey
-        type: string
-      - in: path
-        name: archiveKey
-        type: string
-      responses:
-        200:
-          description: OK
+              $ref: '#/definitions/DMOutput'
+             
     
   /models:
     get:
@@ -467,7 +403,7 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
-            
+           
   /models/{modelKey}:
     get:
       tags:
@@ -479,7 +415,7 @@ paths:
         name: modelKey
         description: "The generated key of a Processer model"
         type: string
-      
+     
       responses:
         200:
           description: OK
@@ -497,7 +433,7 @@ paths:
         name: body
         schema:
           $ref: '#/definitions/ModelMetadata'
-      
+     
       responses:
         200:
           description: OK
@@ -511,71 +447,7 @@ paths:
       responses:
         200:
           description: OK
-              
-  /models/{modelKey}/archives:
-    get:
-      tags:
-      - archives
-      parameters:
-      - in: path
-        name: modelKey
-        type: string
-      
-      responses:
-        200:
-          description: OK
-          schema:
-              $ref: '#/definitions/ModelArchiveMetadata'
-    post:
-      tags:
-      - svcs
-      parameters:
-      - in: path
-        name: modelKey
-        type: string
-      - in: body
-        name: body
-        description: "The new DMService"
-        schema:
-          $ref: "#/definitions/ModelArchiveMetadata"
-      responses:
-        200:
-          description: OK
-          schema:
-              $ref: '#/definitions/ModelArchiveMetadata'
-     
-  /models/{modelKey}/archives/{archiveKey}:
-    get:
-      tags:
-      - svcs
-      - archives
-      parameters:
-      - in: path
-        name: modelKey
-        type: string
-      - in: path
-        name: archiveKey
-        type: string
-      responses:
-        200:
-          description: OK
-          schema:
-              $ref: '#/definitions/ModelArchive'
-    delete:
-      tags:
-      - svcs
-      - archives
-      parameters:
-      - in: path
-        name: modelKey
-        type: string
-      - in: path
-        name: archiveKey
-        type: string
-      responses:
-        200:
-          description: OK
-           
+             
   /models/{modelKey}/data:
     get:
       summary: Get data of DM Model
@@ -587,7 +459,7 @@ paths:
         200:
           description: OK
           schema:
-              $ref: '#/definitions/ModelData'
+            $ref: '#/definitions/ModelData'
     put:
       summary: Get data of DM Model
       parameters:
@@ -603,7 +475,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ModelData'
-            
+           
   /models/{modelKey}/trainer:
     get:
       summary: Get metadata of DM Service
@@ -613,12 +485,12 @@ paths:
         name: modelKey
         description: "The generated key of a Processer model"
         type: string
-      
+     
       responses:
         200:
           description: OK
           schema:
-              $ref: '#/definitions/ModelTrainerLinker'
+              $ref: '#/definitions/TrainerReference'
     put:
       description: Update the trainer
       parameters:
@@ -629,11 +501,11 @@ paths:
       - in: body
         name: body
         schema:
-          $ref: '#/definitions/ModelTrainerLinker'
+          $ref: '#/definitions/TrainerReference'
       responses:
         200:
           description: OK
-            
+           
   /models/{modelKey}/trainer/builds:
     get:
       description: Return the build history of the trainer's build.
@@ -642,14 +514,13 @@ paths:
         name: modelKey
         description: "The generated key of a Processer model"
         type: string
-      
       responses:
         200:
           description: OK
           schema:
             type: array
             items:
-              $ref: '#/definitions/ModelTrainerBuild'
+              $ref: '#/definitions/TrainerBuildMetadata'
     post:
       description: Update the trainer
       parameters:
@@ -665,6 +536,9 @@ paths:
       responses:
         200:
           description: OK
+          schema:
+            $ref: '#/definitions/ModelData'
+           
             
   /models/{modelKey}/trainer/builds/{buildKey}:
     get:
@@ -678,12 +552,12 @@ paths:
         name: buildKey
         description: "The generated key of a Processer model build"
         type: string
-      
+     
       responses:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/ModelTrainerBuild'
+            $ref: '#/definitions/TrainerBuild'
     delete:
       parameters:
       - in: path
@@ -694,11 +568,13 @@ paths:
         name: buildKey
         description: "The generated key of a Processer model build"
         type: string
-      
+     
       responses:
         200:
           description: OK
-            
+          schema:
+            $ref: '#/definitions/TrainerBuild'
+           
   /models/{modelKey}/trainer/builds/{buildKey}/updates:
     get:
       description: Return the build of the trainer's build.
@@ -711,12 +587,12 @@ paths:
         name: buildKey
         description: "The generated key of a Processer model build"
         type: string
-      
+     
       responses:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/ModelTrainerBuild'
+            $ref: '#/definitions/TrainerBuildMetadata'
     post:
       description: update the model as an updatable model
       parameters:
@@ -736,8 +612,8 @@ paths:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/ModelTrainerBuild'
-  
+            $ref: '#/definitions/TrainerBuildMetadata'
+ 
   /trainers:
     get:
       operationId: searchTrainer
@@ -796,7 +672,7 @@ paths:
           schema:
             type: array
             items:
-             $ref: '#/definitions/ModelTrainerMetadata'
+             $ref: '#/definitions/TrainerMetadata'
     post:
       tags:
       - trainer
@@ -804,13 +680,13 @@ paths:
       - in: body
         name: body
         schema:
-          $ref: "#/definitions/ModelTrainerMetadata"
+          $ref: "#/definitions/TrainerMetadata"
       responses:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/ModelTrainerMetadata'
-  
+            $ref: '#/definitions/TrainerMetadata'
+ 
   /trainers/{trainerKey}:
     get:
       tags:
@@ -821,12 +697,12 @@ paths:
       - in: path
         name: trainerKey
         type: string
-      
+     
       responses:
         200:
           description: OK
           schema:
-              $ref: '#/definitions/ModelTrainerMetadata'
+              $ref: '#/definitions/TrainerMetadata'
     put:
       tags:
       - trainer
@@ -838,12 +714,12 @@ paths:
         name: body
         description: "The new DMService"
         schema:
-          $ref: "#/definitions/ModelTrainerMetadata"
+          $ref: "#/definitions/TrainerMetadata"
       responses:
         200:
           description: OK
           schema:
-              $ref: '#/definitions/ModelTrainerMetadata'
+            $ref: '#/definitions/TrainerMetadata'
     delete:
       tags:
       - trainer
@@ -854,58 +730,7 @@ paths:
       responses:
         200:
           description: OK
-              
-  /trainers/{trainerKey}/archives:
-    get:
-      tags:
-      - trainer
-      - archives
-      parameters:
-      - in: path
-        name: trainerKey
-        type: string
-      
-      responses:
-        200:
-          description: OK
-          schema:
-              $ref: '#/definitions/TrainerArchiveMetadata'
-    post:
-      tags:
-      - trainer
-      - archives
-      parameters:
-      - in: path
-        name: trainerKey
-        type: string
-      - in: body
-        name: body
-        description: "The new DMService"
-        schema:
-          $ref: "#/definitions/TrainerArchiveMetadata"
-      responses:
-        200:
-          description: OK
-          schema:
-              $ref: '#/definitions/TrainerArchiveMetadata'
-  
-  /trainers/{trainerKey}/archives/{archiveKey}:
-    get:
-      tags:
-      - trainer
-      parameters:
-        - in: path
-          name: trainerKey
-          type: string
-        - in: path
-          name: archiveKey
-          type: string
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/TrainerArchive'
-              
+             
   /trainers/{trainerKey}/processers:
     get:
       tags:
@@ -943,7 +768,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Processer'
-                          
+                         
   /trainers/{trainerKey}/input:
     get:
       tags:
@@ -975,7 +800,7 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/DMInput'
-                          
+                         
   /trainers/{trainerKey}/evaluations:
     get:
       tags:
@@ -991,7 +816,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/ModelTrainerEvaluation'
+              $ref: '#/definitions/TrainerEvaluation'
     post:
       tags:
       - svcs
@@ -1008,8 +833,8 @@ paths:
         200:
           description: OK
           schema:
-              $ref: '#/definitions/ModelTrainerEvaluation'
-                            
+              $ref: '#/definitions/TrainerEvaluation'
+                           
   /trainers/{trainerKey}/evaluations/{evaKey}:
     get:
       tags:
@@ -1028,7 +853,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/ModelTrainerEvaluation'
+              $ref: '#/definitions/TrainerEvaluation'
     delete:
       tags:
       - trainer
@@ -1043,7 +868,8 @@ paths:
       responses:
         "200":
           description: OK
-  
+ 
+  #Archives services.
   /archives/svcs:
     get:
       responses:
@@ -1051,7 +877,7 @@ paths:
           description: OK
           schema:
             type: array
-            items: 
+            items:
               $ref: '#/definitions/ServiceArchiveMetadata'
     post:
       parameters:
@@ -1062,9 +888,9 @@ paths:
       responses:
         200:
           description: OK
-          schema: 
+          schema:
             $ref: '#/definitions/ServiceArchiveMetadata'
-            
+           
   /archives/svcs/{archiveKey}:
     get:
       parameters:
@@ -1084,7 +910,7 @@ paths:
       responses:
         200:
           description: OK
-      
+     
   /archives/model:
     get:
       responses:
@@ -1092,7 +918,7 @@ paths:
           description: OK
           schema:
             type: array
-            items: 
+            items:
               $ref: '#/definitions/ModelArchiveMetadata'
     post:
       parameters:
@@ -1103,9 +929,9 @@ paths:
       responses:
         200:
           description: OK
-          schema: 
+          schema:
             $ref: '#/definitions/ModelArchiveMetadata'
-            
+           
   /archives/model/{archiveKey}:
     get:
       parameters:
@@ -1125,7 +951,7 @@ paths:
       responses:
         200:
           description: OK
-            
+           
   /archives/trainer:
     get:
       responses:
@@ -1133,7 +959,7 @@ paths:
           description: OK
           schema:
             type: array
-            items: 
+            items:
               $ref: '#/definitions/TrainerArchiveMetadata'
     post:
       parameters:
@@ -1144,9 +970,9 @@ paths:
       responses:
         200:
           description: OK
-          schema: 
+          schema:
             $ref: '#/definitions/TrainerArchiveMetadata'
-            
+           
   /archives/trainer/{archiveKey}:
     get:
       parameters:
@@ -1166,14 +992,15 @@ paths:
       responses:
         200:
           description: OK
-  
-  /processAlgorithms:
+ 
+  #Executer Services
+  /algorithms:
     get:
       summary: Search processers metdata.
       description: Processers, it is actually execute code of any process flow. But this processer do not keep any model or paramter.
       parameters:
         - in: query
-          name: package
+          name: catalog
           type: string
       responses:
         200:
@@ -1182,7 +1009,8 @@ paths:
             type: array
             items:
               $ref: '#/definitions/ProcesserAlgorithm'
-    
+ 
+  
 definitions:
   Domain:
     properties:
@@ -1193,7 +1021,53 @@ definitions:
         type: string
       parentDomain:
         $ref: '#/definitions/Domain'
-  
+ 
+  DMData:
+    properties:
+      key:
+        type: string
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ColumnData'
+ 
+  ColumnData:
+    properties:
+      attribute:
+        $ref: '#/definitions/Attribute'
+      data:
+        type: array
+        items:
+          type: string
+ 
+  DataInfor:
+    properties:
+      name:
+        type: string
+      domain:
+        $ref: '#/definitions/Domain'
+ 
+  Attribute:
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+      format:
+        type: string
+      dataInfor:
+        $ref: '#/definitions/DataInfor'
+     
+  DMInput:
+    properties:
+      key:
+        type: string
+       
+  DMOutput:
+    properties:
+      key:
+        type: string
+       
   DMSvcMetadata:
     required:
       - key
@@ -1216,43 +1090,14 @@ definitions:
         type: boolean
       owner:
         type: string
-  
-  DMData:
+ 
+  ProcessMetadata:
     properties:
       key:
         type: string
-      data:
-        type: array
-        items:
-          $ref: '#/definitions/ColumnData'
-  
-  ColumnData:
-    properties:
-      attribute:
-        $ref: '#/definitions/Attribute'
-      data:
-        type: array
-        items:
-          type: string
-  
-  DataInfor:
-    properties:
-      name:
+      status:
         type: string
-      domain:
-        $ref: '#/definitions/Domain'
-  
-  Attribute:
-    properties:
-      name:
-        type: string
-      type:
-        type: string
-      format:
-        type: string
-      dataInfor:
-        $ref: '#/definitions/DataInfor'
-        
+       
   Process:
     properties:
       key:
@@ -1273,48 +1118,49 @@ definitions:
         type: array
         items:
           type: string
-        
-  ProcessMetadata:
-    properties:
-      key:
-        type: string
-      status:
-        type: string
-        
+       
   Processer:
     properties:
       modelRef:
         $ref: '#/definitions/ModelReference'
       algrithm:
         $ref: '#/definitions/ProcesserAlgorithm'
-  
+ 
   ModelReference:
     properties:
-      modelKey: 
+      modelKey:
         type: string
       accessCode:
         type: string
-      
-  DMInput:
-    properties:
-      key:
-        type: string
-        
-  DMSvcOutput:
-    properties:
-      key:
-        type: string
-  
+ 
   ServiceArchiveMetadata:
+    required:
+      - key
     properties:
       key:
         type: string
-        
+      name:
+        type: string
+      description:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+      domain:
+        $ref: '#/definitions/Domain'
+      type:
+        type: string
+      isPublic:
+        type: boolean
+      owner:
+        type: string
+       
   ServiceArchive:
     properties:
       key:
         type: string
-        
+       
   ModelMetadata:
     required:
       - key
@@ -1337,28 +1183,20 @@ definitions:
         type: boolean
       owner:
         type: string
-  
+       
   ModelData:
     properties:
       name:
         type: string
-        
-  ModelTrainerLinker:
+       
+  TrainerReference:
     properties:
-      key:
+      modelKey:
         type: string
-  
+      accessCode:
+        type: string
+ 
   ModelArchiveMetadata:
-    properties:
-      key:
-        type: string  
-  
-  ModelArchive:
-    properties:
-      key:
-        type: string  
-        
-  ModelTrainerMetadata:
     required:
       - key
     properties:
@@ -1372,7 +1210,35 @@ definitions:
         type: array
         items:
           type: string
-      package:
+      domain:
+        $ref: '#/definitions/Domain'
+      type:
+        type: string
+      isPublic:
+        type: boolean
+      owner:
+        type: string
+ 
+  ModelArchive:
+    properties:
+      key:
+        type: string 
+        
+  TrainerMetadata:
+    required:
+      - key
+    properties:
+      key:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+      catalog:
         description: The catelog path of the trainer, classifier.decisionTree.id3
         type: string
       domain:
@@ -1383,17 +1249,43 @@ definitions:
         type: boolean
       owner:
         type: string
-        
-  ModelTrainerBuild:
-    properties:
-      buildKey:
-        type: string
-        
-  TrainerArchiveMetadata:
+       
+  TrainerBuildMetadata: 
     properties:
       key:
         type: string
-        
+       
+  TrainerBuild:
+    properties:
+      key:
+        type: string
+       
+  TrainerArchiveMetadata:
+    required:
+      - key
+    properties:
+      key:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+      catalog:
+        description: The catelog path of the trainer, classifier.decisionTree.id3
+        type: string
+      domain:
+        $ref: '#/definitions/Domain'
+      type:
+        type: string
+      isPublic:
+        type: boolean
+      owner:
+        type: string
+       
   TrainerArchive:
     properties:
       key:
@@ -1403,15 +1295,26 @@ definitions:
     properties:
       type:
         type: string
-        
-  ModelTrainerEvaluation:
+       
+  TrainerEvaluation:
     properties:
-      buildKey:
+      key:
         type: string
-        
+       
   ProcesserAlgorithm:
     properties:
-      algKey:
+      key:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+      catalog:
+        description: The catelog path of the trainer, classifier.decisionTree.id3
         type: string
         
   errorModel:
@@ -1424,3 +1327,4 @@ definitions:
         format: int32
       message:
         type: string
+ 
