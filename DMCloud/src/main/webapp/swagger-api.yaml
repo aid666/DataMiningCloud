@@ -111,11 +111,11 @@ paths:
         - in: path
           name: svcKey
           type: string
-     
+    
       responses:
         200:
           description: OK
-     
+    
   /svcs/{svcKey}/processes:
     get:
       tags:
@@ -167,7 +167,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Process'
-         
+        
   /svcs/{svcKey}/processes/{processKey}:
     get:
       tags:
@@ -200,7 +200,7 @@ paths:
       responses:
         "200":
           description: OK
-             
+            
   /svcs/{svcKey}/processers:
     get:
       tags:
@@ -238,7 +238,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Processer'
-                         
+                        
   /svcs/{svcKey}/input:
     get:
       tags:
@@ -269,7 +269,7 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/DMInput'
-                         
+                        
   /svcs/{svcKey}/output:
     get:
       tags:
@@ -301,7 +301,7 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/DMOutput'
-             
+            
     
   /models:
     get:
@@ -389,20 +389,18 @@ paths:
       parameters:
         - in: body
           name: body
-          description: ""
           schema:
-            $ref: "#/definitions/ModelMetadata"
+            $ref: "#/definitions/ModelBuildRequest"
       responses:
         200:
           description: OK
-          description: Created DM Processer Model
           schema:
-              $ref: '#/definitions/ModelMetadata'
+             $ref: '#/definitions/ModelMetadata'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/errorModel'
-           
+          
   /models/{modelKey}:
     get:
       tags:
@@ -414,7 +412,7 @@ paths:
         name: modelKey
         description: "The generated key of a Processer model"
         type: string
-     
+    
       responses:
         200:
           description: OK
@@ -432,7 +430,7 @@ paths:
         name: body
         schema:
           $ref: '#/definitions/ModelMetadata'
-     
+    
       responses:
         200:
           description: OK
@@ -446,7 +444,7 @@ paths:
       responses:
         200:
           description: OK
-             
+            
   /models/{modelKey}/data:
     get:
       summary: Get data of DM Model
@@ -474,118 +472,26 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ModelData'
-           
-  /models/{modelKey}/trainer:
+          
+  /models/{modelKey}/build:
     get:
-      summary: Get metadata of DM Service
-      description: Return the medata of model based on the svcKey
       parameters:
       - in: path
         name: modelKey
-        description: "The generated key of a Processer model"
         type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/ModelBuildRequest"
      
-      responses:
-        200:
-          description: OK
-          schema:
-              $ref: '#/definitions/TrainerReference'
-    put:
-      description: Update the trainer
-      parameters:
-      - in: path
-        name: modelKey
-        description: "The generated key of a Processer model"
-        type: string
-      - in: body
-        name: body
-        schema:
-          $ref: '#/definitions/TrainerReference'
-      responses:
-        200:
-          description: OK
-           
-  /models/{modelKey}/trainer/builds:
-    get:
-      description: Return the build history of the trainer's build.
-      parameters:
-      - in: path
-        name: modelKey
-        description: "The generated key of a Processer model"
-        type: string
-      responses:
-        200:
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/TrainerBuildMetadata'
-    post:
-      description: Update the trainer
-      parameters:
-      - in: path
-        name: modelKey
-        description: "The generated key of a Processer model"
-        type: string
-      - in: body
-        name: body
-        description: Training set
-        schema:
-          $ref: '#/definitions/DMData'
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/ModelData'
-           
-  /models/{modelKey}/trainer/builds/{buildKey}:
+  /models/{modelKey}/updates:
     get:
       description: Return the build of the trainer's build.
       parameters:
       - in: path
         name: modelKey
-        description: "The generated key of a Processer model build"
         type: string
-      - in: path
-        name: buildKey
-        description: "The generated key of a Processer model build"
-        type: string
-     
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/TrainerBuild'
-    delete:
-      parameters:
-      - in: path
-        name: modelKey
-        description: "The generated key of a Processer model build"
-        type: string
-      - in: path
-        name: buildKey
-        description: "The generated key of a Processer model build"
-        type: string
-     
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/TrainerBuild'
-           
-  /models/{modelKey}/trainer/builds/{buildKey}/updates:
-    get:
-      description: Return the build of the trainer's build.
-      parameters:
-      - in: path
-        name: modelKey
-        description: "The generated key of a Processer model build"
-        type: string
-      - in: path
-        name: buildKey
-        description: "The generated key of a Processer model build"
-        type: string
-     
       responses:
         200:
           description: OK
@@ -597,9 +503,6 @@ paths:
       - in: path
         name: modelKey
         description: "The generated key of a Processer model build"
-        type: string
-      - in: path
-        name: buildKey
         type: string
       - in: body
         name: body
@@ -695,7 +598,7 @@ paths:
       - in: path
         name: trainerKey
         type: string
-     
+    
       responses:
         200:
           description: OK
@@ -714,7 +617,7 @@ paths:
         schema:
           $ref: "#/definitions/TrainerMetadata"
       responses:
-        200:
+       200:
           description: OK
           schema:
             $ref: '#/definitions/TrainerMetadata'
@@ -728,7 +631,7 @@ paths:
       responses:
         200:
           description: OK
-             
+            
   /trainers/{trainerKey}/processers:
     get:
       tags:
@@ -766,16 +669,16 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Processer'
-                         
+                        
   /trainers/{trainerKey}/input:
     get:
       tags:
       - trainer
       - input
       parameters:
-      - in: path
-        name: trainerKey
-        type: string
+        - in: path
+          name: trainerKey
+          type: string
       responses:
         "200":
           description: OK
@@ -798,7 +701,7 @@ paths:
           description: OK
           schema:
               $ref: '#/definitions/DMInput'
-                         
+                        
   /trainers/{trainerKey}/evaluations:
     get:
       tags:
@@ -826,13 +729,13 @@ paths:
       - in: body
         name: body
         schema:
-          $ref: "#/definitions/EvaluationData"
+         $ref: "#/definitions/EvaluationData"
       responses:
         200:
           description: OK
           schema:
               $ref: '#/definitions/TrainerEvaluation'
-                           
+                          
   /trainers/{trainerKey}/evaluations/{evaKey}:
     get:
       tags:
@@ -857,12 +760,12 @@ paths:
       - trainer
       - evaluation
       parameters:
-      - in: path
-        name: trainerKey
-        type: string
-      - in: path
-        name: evaKey
-        type: string
+        - in: path
+          name: trainerKey
+          type: string
+        - in: path
+          name: evaKey
+          type: string
       responses:
         "200":
           description: OK
@@ -888,7 +791,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ServiceArchiveMetadata'
-           
+          
   /archives/svcs/{archiveKey}:
     get:
       parameters:
@@ -908,7 +811,7 @@ paths:
       responses:
         200:
           description: OK
-     
+    
   /archives/model:
     get:
       responses:
@@ -929,7 +832,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ModelArchiveMetadata'
-           
+          
   /archives/model/{archiveKey}:
     get:
       parameters:
@@ -949,7 +852,7 @@ paths:
       responses:
         200:
           description: OK
-           
+          
   /archives/trainer:
     get:
       responses:
@@ -970,7 +873,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/TrainerArchiveMetadata'
-           
+          
   /archives/trainer/{archiveKey}:
     get:
       parameters:
@@ -1028,20 +931,20 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ProcessMetadata'
-            
+           
   /execute/ad_hoc/{exeKey}:
     get:
       parameters:
         - name: exeKey
           in: path
           type: string
-        
+       
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/ProcessMetadata'
-  
+ 
   /execute/flow:
     get:
       responses:
@@ -1062,20 +965,20 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ProcessFlowMetadata'
-            
+           
   /execute/flow/{flowKey}:
     get:
       parameters:
         - name: flowKey
           in: path
           type: string
-        
+       
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/ProcessFlowMetadata'
-  
+ 
             
   /execute/flow/{flowKey}/processes:
     post:
@@ -1087,13 +990,13 @@ paths:
           in: body
           schema:
             $ref: '#/definitions/DMData'
-        
+       
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/ProcessMetadata'
-  
+ 
             
   
   /execute/processes/{resultKey}:
@@ -1102,13 +1005,13 @@ paths:
         - name: resultKey
           in: path
           type: string
-        
+       
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/ProcessMetadata'
-    
+   
             
   
 definitions:
@@ -1129,7 +1032,7 @@ definitions:
       data:
         type: array
         items:
-          $ref: '#/definitions/ColumnData'
+         $ref: '#/definitions/ColumnData'
  
   ColumnData:
     properties:
@@ -1157,17 +1060,17 @@ definitions:
         type: string
       dataInfor:
         $ref: '#/definitions/DataInfor'
-     
+    
   DMInput:
     properties:
       key:
         type: string
-       
+      
   DMOutput:
     properties:
       key:
         type: string
-       
+      
   DMSvcMetadata:
     required:
       - key
@@ -1197,7 +1100,7 @@ definitions:
         type: string
       status:
         type: string
-       
+      
   Process:
     properties:
       key:
@@ -1218,7 +1121,7 @@ definitions:
         type: array
         items:
           type: string
-       
+      
   Processer:
     properties:
       modelRef:
@@ -1255,12 +1158,12 @@ definitions:
         type: boolean
       owner:
         type: string
-       
+      
   ServiceArchive:
     properties:
       key:
         type: string
-       
+      
   ModelMetadata:
     required:
       - key
@@ -1284,11 +1187,20 @@ definitions:
       owner:
         type: string
        
+  ModelBuildRequest:
+    properties:
+      metadata:
+        $ref: '#/definitions/ModelMetadata'
+      trainSet:
+        $ref: '#/definitions/DMData'
+      trainer:
+        $ref: '#/definitions/TrainerReference'
+   
   ModelData:
     properties:
       name:
         type: string
-       
+      
   TrainerReference:
     properties:
       modelKey:
@@ -1322,7 +1234,7 @@ definitions:
   ModelArchive:
     properties:
       key:
-        type: string 
+        type: string
         
   TrainerMetadata:
     required:
@@ -1349,17 +1261,12 @@ definitions:
         type: boolean
       owner:
         type: string
-       
-  TrainerBuildMetadata: 
+      
+  TrainerBuildMetadata:
     properties:
       key:
         type: string
-       
-  TrainerBuild:
-    properties:
-      key:
-        type: string
-       
+      
   TrainerArchiveMetadata:
     required:
       - key
@@ -1385,22 +1292,22 @@ definitions:
         type: boolean
       owner:
         type: string
-       
+      
   TrainerArchive:
     properties:
       key:
         type: string
-        
+       
   EvaluationData:
     properties:
       type:
         type: string
-       
+      
   TrainerEvaluation:
     properties:
       key:
         type: string
-       
+      
   ProcesserAlgorithm:
     properties:
       key:
@@ -1416,12 +1323,12 @@ definitions:
       catalog:
         description: The catelog path of the trainer, classifier.decisionTree.id3
         type: string
-        
+       
   ProcessAdhocExe:
     properties:
       key:
         type: string
-        
+       
   ProcessFlow:
     properties:
       key:
@@ -1431,7 +1338,7 @@ definitions:
     properties:
       key:
         type: string
-        
+       
   errorModel:
     required:
       - code
@@ -1442,4 +1349,3 @@ definitions:
         format: int32
       message:
         type: string
- 
