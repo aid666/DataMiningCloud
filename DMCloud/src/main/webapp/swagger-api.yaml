@@ -22,7 +22,7 @@ produces:
   - application/json
   - application/xml
 paths:
-  #Designer servic
+  #Service
   /svcs:
     get:
       tags:
@@ -302,7 +302,7 @@ paths:
           schema:
               $ref: '#/definitions/DMOutput'
             
-    
+  #Model  
   /models:
     get:
       description: Search Model Metadata based on the filter. Default limit is 50 and the default start index is 0
@@ -895,7 +895,7 @@ paths:
           description: OK
  
   #Executer Services
-  /algorithms:
+  /execute/algorithms:
     get:
       summary: Search processers metdata.
       description: Processers, it is actually execute code of any process flow. But this processer do not keep any model or paramter.
@@ -979,7 +979,6 @@ paths:
           schema:
             $ref: '#/definitions/ProcessFlowMetadata'
  
-            
   /execute/flow/{flowKey}/processes:
     post:
       parameters:
@@ -996,8 +995,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ProcessMetadata'
- 
-            
   
   /execute/processes/{resultKey}:
     get:
@@ -1012,8 +1009,6 @@ paths:
           schema:
             $ref: '#/definitions/ProcessMetadata'
    
-            
-  
 definitions:
   Domain:
     properties:
@@ -1063,13 +1058,17 @@ definitions:
     
   DMInput:
     properties:
-      key:
-        type: string
+      attributes:
+        type: array
+        items:
+          $ref: '#/definitions/Attribute'
       
   DMOutput:
     properties:
-      key:
-        type: string
+      attributes:
+        type: array
+        items:
+          $ref: '#/definitions/Attribute'
       
   DMSvcMetadata:
     required:
@@ -1125,13 +1124,17 @@ definitions:
   Processer:
     properties:
       modelRef:
-        $ref: '#/definitions/ModelReference'
+        $ref: '#/definitions/Reference'
       algrithm:
         $ref: '#/definitions/ProcesserAlgorithm'
  
-  ModelReference:
+  Reference:
     properties:
-      modelKey:
+      refResource:
+        type: string
+      refKey:
+        type: string
+      refType:
         type: string
       accessCode:
         type: string
@@ -1161,7 +1164,9 @@ definitions:
       
   ServiceArchive:
     properties:
-      key:
+      metadata:
+        $ref: '#/definitions/ServiceArchiveMetadata'
+      content:
         type: string
       
   ModelMetadata:
@@ -1194,19 +1199,14 @@ definitions:
       trainSet:
         $ref: '#/definitions/DMData'
       trainer:
-        $ref: '#/definitions/TrainerReference'
+        $ref: '#/definitions/Reference'
    
   ModelData:
     properties:
       name:
         type: string
-      
-  TrainerReference:
-    properties:
-      modelKey:
-        type: string
-      accessCode:
-        type: string
+      data:
+        $ref: '#/definitions/DMData'
  
   ModelArchiveMetadata:
     required:
@@ -1233,7 +1233,9 @@ definitions:
  
   ModelArchive:
     properties:
-      key:
+      metadata:
+        $ref: '#/definitions/ModelArchiveMetadata'
+      content:
         type: string
         
   TrainerMetadata:
@@ -1305,7 +1307,9 @@ definitions:
       
   TrainerEvaluation:
     properties:
-      key:
+      metadata:
+        $ref: '#/definitions/ModelArchiveMetadata'
+      content:
         type: string
       
   ProcesserAlgorithm:
